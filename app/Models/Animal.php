@@ -2,46 +2,39 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Animal extends Model
 {
     use HasFactory;
 
-    public const STATUS_AVAILABLE = 'available';
-    public const STATUS_PENDING = 'pending';
-    public const STATUS_ADOPTED = 'adopted';
-
     protected $fillable = [
-        'organization_id',
-        'created_by',
-        'name',
-        'species',
-        'breed',
-        'gender',
-        'size',
-        'description',
-        'is_vaccinated',
-        'is_castrated',
-        'status',
+        'name', 'species', 'breed', 'gender', 'birth_date', 'age',
+        'size', 'color', 'description', 'is_castrated', 'is_vaccinated',
+        'health_status', 'status', 'organization_id',
+        'created_by', 'updated_by',
     ];
 
     protected $casts = [
-        'is_vaccinated' => 'boolean',
+        'birth_date' => 'date',
         'is_castrated' => 'boolean',
+        'is_vaccinated' => 'boolean',
     ];
-
-    // RELACIONAMENTOS
 
     public function organization()
     {
         return $this->belongsTo(Organization::class);
     }
 
-    public function creator()
+    public function photos()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->hasMany(AnimalPhoto::class);
+    }
+    
+    public function mainPhoto()
+    {
+        return $this->hasOne(AnimalPhoto::class)->where('is_main', true);
     }
 
     public function adoptions()

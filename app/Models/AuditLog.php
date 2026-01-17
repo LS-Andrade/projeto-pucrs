@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -9,10 +10,8 @@ class AuditLog extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'action',
-        'ip_address',
-        'user_agent'
+        'user_id', 'action', 'ip_address', 'user_agent',
+        'created_by', 'updated_by',
     ];
 
     public function user()

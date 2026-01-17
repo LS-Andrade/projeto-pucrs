@@ -2,53 +2,59 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
-    public const ROLE_ADMIN = 'admin';
-    public const ROLE_PROTECTOR = 'protector';
-    public const ROLE_ADOPTER = 'adopter';
+    use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
+        'name', 'email', 'password', 'phone', 'role', 'is_active',
+        'created_by', 'updated_by',
     ];
 
     protected $hidden = [
         'password',
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
     // RELACIONAMENTOS
+
+    public function organizations()
+    {
+        return $this->belongsToMany(Organization::class)
+            ->withTimestamps()
+            ->withPivot(['created_by', 'updated_by']);
+    }
+
+    public function animalsCreated()
+    {
+        return $this->hasMany(Animal::class, 'created_by');
+    }
 
     public function adoptions()
     {
-        return $this->hasMany(Adoption::class);
+        return $this->hasMany(Adoption::class, 'adopter_id');
+    }
+
+    public function contents()
+    {
+        return $this->hasMany(Content::class, 'author_id');
     }
 
     public function reports()
     {
-        return $this->hasMany(Report::class);
+        return $this->hasMany(Report::class, 'reporter_id');
     }
 
-    public function feedbacks()
+    public function assignedReports()
     {
-        return $this->hasMany(Feedback::class);
+        return $this->hasMany(Report::class, 'assigned_to');
     }
 
-    public function educationalContents()
+    public function auditLogs()
     {
-        return $this->hasMany(EducationalContent::class, 'author_id');
+        return $this->hasMany(AuditLog::class);
     }
 }

@@ -2,84 +2,51 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title', 'Bem-Estar Animal')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>@yield('title', 'Animalidade')</title>
+
+    <meta name="description" content="Animalidade — Plataforma dedicada ao bem-estar animal, adoção responsável, proteção e conscientização.">
+    <meta name="keywords" content="bem-estar animal, adoção, proteção animal, direitos dos animais, legislação animal, animalidade">
+    <meta name="author" content="Animalidade">
+
+    <meta property="og:title" content="Animalidade — Bem-estar Animal">
+    <meta property="og:description" content="Plataforma dedicada ao bem-estar animal, adoção responsável e proteção.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_BR">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50 text-gray-900 antialiased">
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
 
-<div class="min-h-screen flex flex-col">
+<header class="bg-white dark:bg-gray-800 shadow">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <a href="{{ route('home') }}" class="flex items-center space-x-3">
+            <img src="{{ asset('images/logo-animalidade.svg') }}" alt="Animalidade" class="h-10">
+        </a>
 
-    {{-- Navbar --}}
-    <header x-data="{ open: false }" class="bg-white shadow">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="/" class="text-xl font-bold text-emerald-600">
-                🐾 Bem-Estar Animal
-            </a>
+        <nav class="space-x-6">
+            <a href="{{ route('home') }}" class="hover:text-green-600">Início</a>
+            <a href="{{ route('animals.index') }}" class="hover:text-green-600">Adoção</a>
+            <a href="{{ route('reports.create') }}" class="hover:text-green-600">Denúncias</a>
+            <a href="{{ route('contents.index') }}" class="hover:text-green-600">Conteúdos</a>
 
-            {{-- Desktop menu --}}
-            <nav class="hidden md:flex space-x-6">
-                <a href="/animals" class="text-gray-700 hover:text-emerald-600">Animais</a>
-                <a href="/contents" class="text-gray-700 hover:text-emerald-600">Conteúdos</a>
-                <a href="/reports" class="text-gray-700 hover:text-emerald-600">Denúncias</a>
-                @auth
-                    <a href="/dashboard" class="text-gray-700 hover:text-emerald-600">Dashboard</a>
-                    <form method="POST" action="/logout">
-                        @csrf
-                        <button type="submit" class="text-red-600 hover:text-red-700">Sair</button>
-                    </form>
-                @else
-                    <a href="/login" class="text-gray-700 hover:text-emerald-600">Entrar</a>
-                    <a href="/register" class="text-gray-700 hover:text-emerald-600">Cadastrar</a>
-                @endauth
-            </nav>
+            @auth
+                <a href="{{ route('dashboard') }}" class="hover:text-green-600">Painel</a>
+            @endauth
+        </nav>
+    </div>
+</header>
 
-            {{-- Mobile menu button --}}
-            <button @click="open = !open" class="md:hidden text-gray-700 focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M4 6h16M4 12h16M4 18h16"/>
-                </svg>
-            </button>
-        </div>
+<main class="min-h-screen py-10 px-4">
+    @yield('content')
+</main>
 
-        {{-- Mobile menu --}}
-        <div x-show="open" @click.outside="open = false" class="md:hidden bg-white border-t">
-            <nav class="flex flex-col px-4 py-3 space-y-2">
-                <a href="/animals" class="block py-2 text-gray-700 hover:text-emerald-600">Animais</a>
-                <a href="/contents" class="block py-2 text-gray-700 hover:text-emerald-600">Conteúdos</a>
-                <a href="/reports" class="block py-2 text-gray-700 hover:text-emerald-600">Denúncias</a>
-                @auth
-                    <a href="/dashboard" class="block py-2 text-gray-700 hover:text-emerald-600">Dashboard</a>
-                    <form method="POST" action="/logout">
-                        @csrf
-                        <button type="submit" class="block py-2 text-left text-red-600 hover:text-red-700 w-full">
-                            Sair
-                        </button>
-                    </form>
-                @else
-                    <a href="/login" class="block py-2 text-gray-700 hover:text-emerald-600">Entrar</a>
-                    <a href="/register" class="block py-2 text-gray-700 hover:text-emerald-600">Cadastrar</a>
-                @endauth
-            </nav>
-        </div>
-    </header>
-
-    {{-- Conteúdo principal --}}
-    <main class="flex-1 max-w-7xl mx-auto px-4 py-6">
-        @yield('content')
-    </main>
-
-    {{-- Footer --}}
-    <footer class="bg-white border-t">
-        <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
-            © {{ date('Y') }} Projeto Bem-Estar Animal — Desenvolvido por Lucas Andrade 🐾
-        </div>
-    </footer>
-
-</div>
+<footer class="bg-white dark:bg-gray-800 border-t mt-12">
+    <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-600 dark:text-gray-400">
+        © {{ date('Y') }} Animalidade — Promovendo o bem-estar animal.
+    </div>
+</footer>
 
 </body>
 </html>

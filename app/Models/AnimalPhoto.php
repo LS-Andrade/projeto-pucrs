@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -8,14 +9,15 @@ class AnimalPhoto extends Model
 {
     use HasFactory;
 
+    protected $table = 'animal_photo';
+
     protected $fillable = [
-        'animal_id',
-        'photo_path',
-        'is_main'
+        'animal_id', 'photo', 'is_main',
+        'created_by', 'updated_by',
     ];
 
     protected $casts = [
-        'is_main' => 'boolean'
+        'is_main' => 'boolean',
     ];
 
     public function animal()

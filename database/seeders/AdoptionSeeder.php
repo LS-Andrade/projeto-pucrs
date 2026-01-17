@@ -3,26 +3,23 @@
 namespace Database\Seeders;
 
 use App\Models\Adoption;
-use App\Models\User;
 use App\Models\Animal;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class AdoptionSeeder extends Seeder
 {
     public function run(): void
     {
-        $users = User::all();
+        $admin = User::first();
         $animals = Animal::all();
+        $users = User::where('role', 'user')->get();
 
-        foreach ($users as $user) {
-            if ($animals->isEmpty()) break;
-
-            $animal = $animals->shift();
-
+        foreach ($animals->random(min(10, $animals->count())) as $animal) {
             Adoption::factory()->create([
-                'created_by' => $user->id,
                 'animal_id' => $animal->id,
-                'status' => Adoption::STATUS_PENDING,
+                'adopter_id' => $users->random()->id,
+                'created_by' => $admin->id,
             ]);
         }
     }

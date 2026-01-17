@@ -10,11 +10,10 @@ class ReportSeeder extends Seeder
 {
     public function run(): void
     {
-        $users = User::all();
+        $admin = User::first();
 
-        Report::factory()->count(10)->create([
-            'created_by' => $users->random()->id,
-            'status' => Report::STATUS_OPEN,
+        Report::factory(15)->create([
+            'created_by' => $admin->id,
         ]);
     }
 }

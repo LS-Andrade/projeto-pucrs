@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Factories;
 
 use App\Models\AdoptionFollowup;
@@ -15,8 +16,9 @@ class AdoptionFollowupFactory extends Factory
         return [
             'adoption_id' => Adoption::factory(),
             'notes' => $this->faker->paragraph(),
-            'visit_date' => $this->faker->date(),
+            'visit_date' => $this->faker->dateTimeBetween('-6 months', 'now'),
             'created_by' => User::factory(),
+            'updated_by' => null,
         ];
     }
 }

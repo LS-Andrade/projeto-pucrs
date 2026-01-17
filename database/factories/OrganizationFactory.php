@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Organization;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrganizationFactory extends Factory
@@ -12,13 +13,15 @@ class OrganizationFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->company(),
-            'description' => fake()->paragraph(),
-            'phone' => fake()->phoneNumber(),
-            'email' => fake()->companyEmail(),
-            'address' => fake()->streetAddress(),
-            'city' => fake()->city(),
-            'state' => fake()->stateAbbr(),
+            'name' => $this->faker->company(),
+            'description' => $this->faker->paragraph(),
+            'phone' => $this->faker->phoneNumber(),
+            'email' => $this->faker->companyEmail(),
+            'address' => $this->faker->streetAddress(),
+            'city' => $this->faker->city(),
+            'state' => $this->faker->stateAbbr(),
+            'created_by' => User::factory(),
+            'updated_by' => null,
         ];
     }
 }

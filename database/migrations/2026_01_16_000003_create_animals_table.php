@@ -2,27 +2,28 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
 return new class extends Migration {
     public function up(): void
     {
         Schema::create('animals', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->enum('species', ['dog', 'cat', 'other']);
-            $table->string('breed', 100)->nullable();
-            $table->enum('gender', ['male', 'female', 'unknown']);
+            $table->string('name');
+            $table->string('species');
+            $table->string('breed')->nullable();
+            $table->string('gender');
             $table->date('birth_date')->nullable();
-            $table->enum('size', ['small', 'medium', 'large'])->nullable();
-            $table->string('color', 50)->nullable();
+            $table->integer('age')->nullable();
+            $table->string('size')->nullable();
+            $table->string('color')->nullable();
             $table->text('description')->nullable();
             $table->boolean('is_castrated')->default(false);
             $table->boolean('is_vaccinated')->default(false);
-            $table->text('health_status')->nullable();
-            $table->enum('status', ['available', 'adopted', 'in_treatment', 'lost'])->default('available');
+            $table->string('health_status')->nullable();
+            $table->string('status')->default('available');
             $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
         });
     }
 

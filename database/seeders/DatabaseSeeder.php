@@ -11,11 +11,16 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             OrganizationSeeder::class,
+            OrganizationUserSeeder::class,
+            CategorySeeder::class,
+            ContentSeeder::class,
             AnimalSeeder::class,
+            AnimalPhotoSeeder::class,
             AdoptionSeeder::class,
+            AdoptionFollowupSeeder::class,
             ReportSeeder::class,
-            EducationalContentSeeder::class,
-            FeedbackSeeder::class,
+            ReportAttachmentSeeder::class,
+            AuditLogSeeder::class,
         ]);
     }
 }

@@ -1,131 +1,78 @@
 <?php
-// routes/api.php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AnimalController;
-use App\Http\Controllers\AdoptionController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\EducationalContentController;
-use App\Http\Controllers\OrganizationController;
-use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\OrganizationController;
+use App\Http\Controllers\Api\AnimalController;
+use App\Http\Controllers\Api\AnimalPhotoController;
+use App\Http\Controllers\Api\AdoptionController;
+use App\Http\Controllers\Api\AdoptionFollowupController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ContentController;
+use App\Http\Controllers\Api\ReportController;
+use App\Http\Controllers\Api\ReportAttachmentController;
+use App\Http\Controllers\Api\AuditLogController;
 
 /*
 |--------------------------------------------------------------------------
-| Rotas Públicas
+| Public routes
 |--------------------------------------------------------------------------
 */
 
-Route::post('/auth/register', [AuthController::class, 'register']);
-Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
+Route::post('/auth/register', [\App\Http\Controllers\Api\AuthController::class, 'register']);
 
+// Public browsing
 Route::get('/animals', [AnimalController::class, 'index']);
 Route::get('/animals/{animal}', [AnimalController::class, 'show']);
-
-Route::get('/contents', [EducationalContentController::class, 'index']);
-Route::get('/contents/{slug}', [EducationalContentController::class, 'show']);
-
-Route::post('/reports/public', [ReportController::class, 'storePublic']);
+Route::get('/organizations', [OrganizationController::class, 'index']);
+Route::get('/organizations/{organization}', [OrganizationController::class, 'show']);
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/contents', [ContentController::class, 'index']);
+Route::get('/contents/{content}', [ContentController::class, 'show']);
 
 /*
 |--------------------------------------------------------------------------
-| Rotas Protegidas (Autenticação)
+| Authenticated routes
 |--------------------------------------------------------------------------
 */
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    // Autenticação
-    Route::post('/auth/logout', [AuthController::class, 'logout']);
-    Route::get('/auth/me', [AuthController::class, 'me']);
+    // Users
+    Route::apiResource('users', UserController::class);
 
-    /*
-    |----------------------
-    | Organizações
-    |----------------------
-    */
+    // Organizations
+    Route::apiResource('organizations', OrganizationController::class);
 
-    Route::middleware('role:admin,protector')->group(function () {
-        Route::apiResource('organizations', OrganizationController::class)->except(['index', 'show']);
-    });
+    // Organization ↔ Users pivot
+    Route::post('/organizations/{organization}/users/{user}', [OrganizationController::class, 'attachUser']);
+    Route::delete('/organizations/{organization}/users/{user}', [OrganizationController::class, 'detachUser']);
 
-    Route::get('/organizations', [OrganizationController::class, 'index']);
-    Route::get('/organizations/{organization}', [OrganizationController::class, 'show']);
+    // Animals
+    Route::apiResource('animals', AnimalController::class)->except(['index', 'show']);
 
-    /*
-    |----------------------
-    | Animais
-    |----------------------
-    */
+    // Animal Photos
+    Route::apiResource('animal-photos', AnimalPhotoController::class);
 
-    Route::middleware('role:admin,protector')->group(function () {
-        Route::post('/animals', [AnimalController::class, 'store']);
-        Route::put('/animals/{animal}', [AnimalController::class, 'update']);
-        Route::delete('/animals/{animal}', [AnimalController::class, 'destroy']);
+    // Adoptions
+    Route::apiResource('adoptions', AdoptionController::class);
 
-        Route::post('/animals/{animal}/photos', [AnimalController::class, 'uploadPhoto']);
-        Route::delete('/animals/{animal}/photos/{photo}', [AnimalController::class, 'deletePhoto']);
-    });
+    // Adoption Followups
+    Route::apiResource('adoption-followups', AdoptionFollowupController::class);
 
-    /*
-    |----------------------
-    | Adoções
-    |----------------------
-    */
+    // Categories
+    Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
 
-    Route::middleware('role:admin,adopter,protector')->group(function () {
-        Route::post('/adoptions', [AdoptionController::class, 'store']);
-        Route::get('/adoptions', [AdoptionController::class, 'index']);
-        Route::get('/adoptions/{adoption}', [AdoptionController::class, 'show']);
-    });
+    // Contents
+    Route::apiResource('contents', ContentController::class)->except(['index', 'show']);
 
-    Route::middleware('role:admin,protector')->group(function () {
-        Route::patch('/adoptions/{adoption}/approve', [AdoptionController::class, 'approve']);
-        Route::patch('/adoptions/{adoption}/reject', [AdoptionController::class, 'reject']);
-        Route::patch('/adoptions/{adoption}/complete', [AdoptionController::class, 'complete']);
-    });
+    // Reports
+    Route::apiResource('reports', ReportController::class);
 
-    /*
-    |----------------------
-    | Denúncias
-    |----------------------
-    */
+    // Report Attachments
+    Route::apiResource('report-attachments', ReportAttachmentController::class);
 
-    Route::middleware('role:admin,protector')->group(function () {
-        Route::get('/reports', [ReportController::class, 'index']);
-        Route::get('/reports/{report}', [ReportController::class, 'show']);
-        Route::patch('/reports/{report}', [ReportController::class, 'update']);
-        Route::patch('/reports/{report}/assign', [ReportController::class, 'assign']);
-        Route::patch('/reports/{report}/resolve', [ReportController::class, 'resolve']);
-        Route::patch('/reports/{report}/dismiss', [ReportController::class, 'dismiss']);
-    });
-
-    /*
-    |----------------------
-    | Conteúdo Educativo
-    |----------------------
-    */
-
-    Route::middleware('role:admin')->group(function () {
-        Route::post('/contents', [EducationalContentController::class, 'store']);
-        Route::put('/contents/{content}', [EducationalContentController::class, 'update']);
-        Route::delete('/contents/{content}', [EducationalContentController::class, 'destroy']);
-        Route::patch('/contents/{content}/publish', [EducationalContentController::class, 'publish']);
-        Route::patch('/contents/{content}/unpublish', [EducationalContentController::class, 'unpublish']);
-    });
-
-    /*
-    |----------------------
-    | Feedback
-    |----------------------
-    */
-
-    Route::middleware('role:admin,adopter,protector')->group(function () {
-        Route::post('/feedbacks', [FeedbackController::class, 'store']);
-    });
-
-    Route::middleware('role:admin')->group(function () {
-        Route::get('/feedbacks', [FeedbackController::class, 'index']);
-    });
+    // Audit Logs
+    Route::apiResource('audit-logs', AuditLogController::class)->only(['index', 'show']);
 });

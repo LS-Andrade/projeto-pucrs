@@ -1,34 +1,36 @@
 <?php
+
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\Report;
+use App\Models\User;
 
 class ReportPolicy
 {
-    public function view(User $user, Report $report)
+    public function viewAny(User $user): bool
     {
-        return $user->role === 'admin'
-            || $report->assigned_to === $user->id
-            || $report->reporter_id === $user->id;
+        return in_array($user->role, ['admin', 'manager', 'staff']);
     }
 
-    public function update(User $user, Report $report)
+    public function view(User $user, Report $report): bool
     {
-        return $user->role === 'admin' || $report->assigned_to === $user->id;
+        return $user->role === 'admin' ||
+               $report->reporter_id === $user->id ||
+               $report->assigned_to === $user->id;
     }
 
-    public function assign(User $user, Report $report)
+    public function create(User $user): bool
     {
-        return in_array($user->role, ['admin', 'protector']);
+        return true;
     }
 
-    public function resolve(User $user, Report $report)
+    public function update(User $user, Report $report): bool
     {
-        return $this->update($user, $report);
+        return $user->role === 'admin' ||
+               $report->assigned_to === $user->id;
     }
 
-    public function dismiss(User $user, Report $report)
+    public function delete(User $user, Report $report): bool
     {
         return $user->role === 'admin';
     }

@@ -11,14 +11,13 @@ class AnimalSeeder extends Seeder
 {
     public function run(): void
     {
+        $admin = User::first();
         $organizations = Organization::all();
-        $users = User::all();
 
         foreach ($organizations as $organization) {
-            Animal::factory()->count(5)->create([
+            Animal::factory(rand(5, 10))->create([
                 'organization_id' => $organization->id,
-                'created_by' => $users->random()->id,
-                'status' => Animal::STATUS_AVAILABLE,
+                'created_by' => $admin->id,
             ]);
         }
     }

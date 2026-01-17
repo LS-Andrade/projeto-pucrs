@@ -1,8 +1,10 @@
 <?php
+
 namespace Database\Factories;
 
 use App\Models\ReportAttachment;
 use App\Models\Report;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ReportAttachmentFactory extends Factory
@@ -13,8 +15,9 @@ class ReportAttachmentFactory extends Factory
     {
         return [
             'report_id' => Report::factory(),
-            'file_path' => $this->faker->filePath(),
-            'file_type' => $this->faker->mimeType(),
+            'file_path' => 'reports/' . $this->faker->uuid() . '.jpg',
+            'created_by' => User::factory(),
+            'updated_by' => null,
         ];
     }
 }

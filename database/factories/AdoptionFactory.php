@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Adoption;
-use App\Models\User;
 use App\Models\Animal;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AdoptionFactory extends Factory
@@ -14,10 +14,16 @@ class AdoptionFactory extends Factory
     public function definition(): array
     {
         return [
-            'created_by' => User::factory(),
             'animal_id' => Animal::factory(),
-            'status' => Adoption::STATUS_PENDING,
-            'message' => fake()->sentence(),
+            'adopter_id' => User::factory(),
+            'status' => $this->faker->randomElement([
+                Adoption::STATUS_PENDING,
+                Adoption::STATUS_APPROVED,
+                Adoption::STATUS_REJECTED,
+            ]),
+            'motivation' => $this->faker->sentence(),
+            'created_by' => User::factory(),
+            'updated_by' => null,
         ];
     }
 }

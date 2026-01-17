@@ -13,18 +13,25 @@ class AnimalFactory extends Factory
 
     public function definition(): array
     {
+        $birthDate = $this->faker->dateTimeBetween('-10 years', '-1 month');
+
         return [
-            'name' => fake()->firstName(),
-            'species' => fake()->randomElement(['dog', 'cat']),
-            'breed' => fake()->word(),
-            'gender' => fake()->randomElement(['male', 'female']),
-            'size' => fake()->randomElement(['small', 'medium', 'large']),
-            'description' => fake()->paragraph(),
-            'is_vaccinated' => fake()->boolean(),
-            'is_castrated' => fake()->boolean(),
-            'status' => Animal::STATUS_AVAILABLE,
+            'name' => $this->faker->firstName(),
+            'species' => $this->faker->randomElement(['dog', 'cat', 'bird', 'rabbit']),
+            'breed' => $this->faker->word(),
+            'gender' => $this->faker->randomElement(['male', 'female']),
+            'birth_date' => $birthDate,
+            'age' => now()->diffInYears($birthDate),
+            'size' => $this->faker->randomElement(['small', 'medium', 'large']),
+            'color' => $this->faker->safeColorName(),
+            'description' => $this->faker->paragraph(),
+            'is_castrated' => $this->faker->boolean(),
+            'is_vaccinated' => $this->faker->boolean(),
+            'health_status' => $this->faker->randomElement(['healthy', 'under treatment', 'special needs']),
+            'status' => 'available',
             'organization_id' => Organization::factory(),
             'created_by' => User::factory(),
+            'updated_by' => null,
         ];
     }
 }

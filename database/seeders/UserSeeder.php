@@ -10,14 +10,19 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name' => 'Administrador',
+        $admin = User::create([
+            'name' => 'Admin',
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
+            'phone' => '11999999999',
             'role' => 'admin',
+            'is_active' => true,
+            'created_by' => null,
+            'updated_by' => null,
         ]);
 
-        User::factory()->count(3)->create(['role' => 'protector']);
-        User::factory()->count(6)->create(['role' => 'adopter']);
+        User::factory(10)->create([
+            'created_by' => $admin->id,
+        ]);
     }
 }

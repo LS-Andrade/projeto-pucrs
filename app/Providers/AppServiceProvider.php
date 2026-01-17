@@ -22,12 +22,16 @@ use App\Policies\FeedbackPolicy;
 class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        Animal::class => AnimalPolicy::class,
-        Adoption::class => AdoptionPolicy::class,
-        Report::class => ReportPolicy::class,
-        EducationalContent::class => EducationalContentPolicy::class,
-        Organization::class => OrganizationPolicy::class,
-        Feedback::class => FeedbackPolicy::class,
+        \App\Models\User::class => \App\Policies\UserPolicy::class,
+        \App\Models\Organization::class => \App\Policies\OrganizationPolicy::class,
+        \App\Models\Animal::class => \App\Policies\AnimalPolicy::class,
+        \App\Models\Adoption::class => \App\Policies\AdoptionPolicy::class,
+        \App\Models\AdoptionFollowup::class => \App\Policies\AdoptionFollowupPolicy::class,
+        \App\Models\Category::class => \App\Policies\CategoryPolicy::class,
+        \App\Models\Content::class => \App\Policies\ContentPolicy::class,
+        \App\Models\Report::class => \App\Policies\ReportPolicy::class,
+        \App\Models\ReportAttachment::class => \App\Policies\ReportAttachmentPolicy::class,
+        \App\Models\AuditLog::class => \App\Policies\AuditLogPolicy::class,
     ];
     
     public function boot(): void

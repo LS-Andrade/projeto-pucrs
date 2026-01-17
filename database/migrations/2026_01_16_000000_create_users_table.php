@@ -8,17 +8,15 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 150);
-            $table->string('email', 150)->unique();
+            $table->string('name');
+            $table->string('email')->unique();
             $table->string('password');
-            $table->string('phone', 20)->nullable();
-            $table->enum('role', ['admin', 'protector', 'adopter', 'volunteer'])->default('adopter');
+            $table->string('phone')->nullable();
+            $table->string('role')->default('user');
             $table->boolean('is_active')->default(true);
-            $table->integer('created_by')->nullable();
-            $table->timestamp('created_at', precision: 0)->nullable();
-            $table->integer('updated_by')->nullable();
-            $table->timestamp('updated_at', precision: 0)->nullable();
             $table->timestamps();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
         });
     }
 

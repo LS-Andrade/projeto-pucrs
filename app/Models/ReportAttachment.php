@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -9,9 +10,8 @@ class ReportAttachment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'report_id',
-        'file_path',
-        'file_type'
+        'report_id', 'file_path',
+        'created_by', 'updated_by',
     ];
 
     public function report()

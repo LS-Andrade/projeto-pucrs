@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Factories;
 
 use App\Models\AuditLog;
@@ -13,9 +14,11 @@ class AuditLogFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'action' => $this->faker->sentence(),
+            'action' => $this->faker->sentence(4),
             'ip_address' => $this->faker->ipv4(),
             'user_agent' => $this->faker->userAgent(),
+            'created_by' => User::factory(),
+            'updated_by' => null,
         ];
     }
 }

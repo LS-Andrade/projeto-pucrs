@@ -1,31 +1,38 @@
 <?php
+
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\Adoption;
+use App\Models\User;
 
 class AdoptionPolicy
 {
-    public function view(User $user, Adoption $adoption)
+    public function viewAny(User $user): bool
     {
-        return $user->role === 'admin'
-            || $adoption->adopter_id === $user->id
-            || $adoption->animal->organization->users->contains($user);
+        return in_array($user->role, ['admin', 'manager', 'staff']);
     }
 
-    public function approve(User $user, Adoption $adoption)
+    public function view(User $user, Adoption $adoption): bool
     {
-        return in_array($user->role, ['admin', 'protector'])
-            && $adoption->animal->organization->users->contains($user);
+        return $user->role === 'admin' ||
+               $adoption->adopter_id === $user->id ||
+               ($adoption->animal->organization->users->contains($user->id));
     }
 
-    public function reject(User $user, Adoption $adoption)
+    public function create(User $user): bool
     {
-        return $this->approve($user, $adoption);
+        return $user->role === 'user';
     }
 
-    public function complete(User $user, Adoption $adoption)
+    public function update(User $user, Adoption $adoption): bool
     {
-        return $this->approve($user, $adoption);
+        return $user->role === 'admin' ||
+               ($user->role !== 'user' &&
+                $adoption->animal->organization->users->contains($user->id));
+    }
+
+    public function delete(User $user, Adoption $adoption): bool
+    {
+        return $user->role === 'admin';
     }
 }

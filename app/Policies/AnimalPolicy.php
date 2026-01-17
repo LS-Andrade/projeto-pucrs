@@ -1,23 +1,36 @@
 <?php
+
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\Animal;
+use App\Models\User;
 
 class AnimalPolicy
 {
-    public function create(User $user)
+    public function viewAny(User $user): bool
     {
-        return in_array($user->role, ['admin', 'protector']);
+        return true; // Público
     }
 
-    public function update(User $user, Animal $animal)
+    public function view(User $user, Animal $animal): bool
     {
-        return $user->role === 'admin' || $animal->organization->users->contains($user);
+        return true;
     }
 
-    public function delete(User $user, Animal $animal)
+    public function create(User $user): bool
     {
-        return $user->role === 'admin' || $animal->organization->users->contains($user);
+        return in_array($user->role, ['admin', 'manager', 'staff']);
+    }
+
+    public function update(User $user, Animal $animal): bool
+    {
+        return $user->role === 'admin' ||
+               ($user->role === 'manager' && 
+                $animal->organization->users->contains($user->id));
+    }
+
+    public function delete(User $user, Animal $animal): bool
+    {
+        return $user->role === 'admin';
     }
 }

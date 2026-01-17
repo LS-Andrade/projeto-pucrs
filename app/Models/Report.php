@@ -2,29 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Report extends Model
 {
     use HasFactory;
 
-    public const STATUS_OPEN = 'open';
-    public const STATUS_IN_PROGRESS = 'in_progress';
-    public const STATUS_RESOLVED = 'resolved';
-
     protected $fillable = [
-        'created_by',
-        'title',
-        'description',
-        'location',
-        'status',
+        'reporter_id', 'animal_description', 'location',
+        'city', 'state', 'status', 'assigned_to',
+        'created_by', 'updated_by',
     ];
 
-    // RELACIONAMENTOS
-
-    public function user()
+    public function reporter()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'reporter_id');
+    }
+
+    public function assignedUser()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(ReportAttachment::class);
     }
 }
