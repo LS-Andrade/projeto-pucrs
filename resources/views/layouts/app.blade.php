@@ -1,52 +1,50 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Animalidade')</title>
 
-    <meta name="description" content="Animalidade — Plataforma dedicada ao bem-estar animal, adoção responsável, proteção e conscientização.">
-    <meta name="keywords" content="bem-estar animal, adoção, proteção animal, direitos dos animais, legislação animal, animalidade">
-    <meta name="author" content="Animalidade">
+    <meta name="description" content="Animalidade — Plataforma para promoção do bem-estar animal, adoção responsável e educação animal.">
 
-    <meta property="og:title" content="Animalidade — Bem-estar Animal">
-    <meta property="og:description" content="Plataforma dedicada ao bem-estar animal, adoção responsável e proteção.">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="pt_BR">
+    {{-- Assets compilados --}}
+    @php
+        $manifestPath = public_path('build/manifest.json');
+    @endphp
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if(file_exists($manifestPath))
+        @php
+            $manifest = json_decode(file_get_contents($manifestPath), true);
+            $css = $manifest['resources/css/app.css']['file'] ?? null;
+            $js = $manifest['resources/js/app.js']['file'] ?? null;
+        @endphp
+
+        @if($css)
+            <link rel="stylesheet" href="{{ asset('build/' . $css) }}">
+        @endif
+
+        @if($js)
+            <script src="{{ asset('build/' . $js) }}" defer></script>
+        @endif
+    @else
+        {{-- Fallback --}}
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <script src="{{ asset('js/app.js') }}" defer></script>
+    @endif
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
-<header class="bg-white dark:bg-gray-800 shadow">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        <a href="{{ route('home') }}" class="flex items-center space-x-3">
-            <img src="{{ asset('images/logo-animalidade.svg') }}" alt="Animalidade" class="h-10">
-        </a>
+    {{-- Header --}}
+    @include('partials.header')
 
-        <nav class="space-x-6">
-            <a href="{{ route('home') }}" class="hover:text-green-600">Início</a>
-            <a href="{{ route('animals.index') }}" class="hover:text-green-600">Adoção</a>
-            <a href="{{ route('reports.create') }}" class="hover:text-green-600">Denúncias</a>
-            <a href="{{ route('contents.index') }}" class="hover:text-green-600">Conteúdos</a>
+    {{-- Main --}}
+    <main class="flex-1">
+        @yield('content')
+    </main>
 
-            @auth
-                <a href="{{ route('dashboard') }}" class="hover:text-green-600">Painel</a>
-            @endauth
-        </nav>
-    </div>
-</header>
+    {{-- Footer --}}
+    @include('partials.footer')
 
-<main class="min-h-screen py-10 px-4">
-    @yield('content')
-</main>
-
-<footer class="bg-white dark:bg-gray-800 border-t mt-12">
-    <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-600 dark:text-gray-400">
-        © {{ date('Y') }} Animalidade — Promovendo o bem-estar animal.
-    </div>
-</footer>
-
+    @stack('scripts')
 </body>
 </html>

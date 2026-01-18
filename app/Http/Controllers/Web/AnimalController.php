@@ -8,13 +8,10 @@ use Illuminate\Http\Request;
 
 class AnimalController extends Controller
 {
+    
     public function index(Request $request)
     {
-        $query = Animal::query()->where('status', 'available');
-
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
+        $query = Animal::with('mainPhoto')->where('status', 'available');
 
         if ($request->filled('species')) {
             $query->where('species', $request->species);
@@ -24,10 +21,21 @@ class AnimalController extends Controller
             $query->where('size', $request->size);
         }
 
-        return view('animals.index', [
-            'animals' => $query->with('photos')->paginate(9)->withQueryString(),
-            'speciesList' => Animal::select('species')->distinct()->pluck('species'),
-        ]);
+        if ($request->filled('gender')) {
+            $query->where('gender', $request->gender);
+        }
+
+        if ($request->filled('is_castrated')) {
+            $query->where('is_castrated', $request->is_castrated);
+        }
+
+        if ($request->filled('is_vaccinated')) {
+            $query->where('is_vaccinated', $request->is_vaccinated);
+        }
+
+        $animals = $query->latest()->paginate(12)->withQueryString();
+
+        return view('animals.index', compact('animals'));
     }
     
     public function show(Animal $animal)
