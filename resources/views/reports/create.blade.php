@@ -3,6 +3,7 @@
 @section('title', 'Fazer Denúncia')
 
 @section('content')
+<div class="max-w-7xl mx-auto px-4 py-12">
 <h1 class="text-2xl font-bold mb-6">Fazer Denúncia</h1>
 
 <form method="POST" action="{{ route('reports.store') }}"
@@ -34,4 +35,5 @@
         Enviar denúncia
     </button>
 </form>
+</div>
 @endsection

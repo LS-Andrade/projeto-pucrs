@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Animais para Adoção — Animalidade')
+@section('title', 'Animais para Adoção - Animalidade')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 py-12">
+<div class="max-w-7xl mx-auto px-4 py-8">
 
     {{-- Título --}}
     <section class="mb-10">
@@ -18,15 +18,15 @@
     <div class="flex flex-col lg:flex-row gap-8">
 
         {{-- Filtros --}}
-        <aside class="w-full lg:w-3/12 order-2 lg:order-1">
+        <aside class="w-full lg:w-1/3 order-1">
             @include('partials.filters')
         </aside>
     
         {{-- Lista --}}
-        <section class="w-full lg:w-9/12 order-1 lg:order-2">
+        <section class="w-full lg:w-2/3 order-2">
 
             @if($animals->count())
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
                     @foreach($animals as $animal)
                         <div class="bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col">
 
@@ -45,7 +45,7 @@
 
                             {{-- Conteúdo --}}
                             <div class="p-4 flex flex-col flex-1">
-                                <h2 class="text-lg font-semibold text-gray-800 mb-1">
+                                <h2 class="text-lg font-semibold text-[#A02CDB] mb-1">
                                     {{ $animal->name }}
                                 </h2>
 
@@ -56,13 +56,13 @@
                                 <p class="text-sm text-gray-600 mb-4 line-clamp-2">
                                     {{ $animal->description ?? 'Sem descrição disponível.' }}
                                 </p>
-
-                                <div class="mt-auto">
-                                    <a href="{{ route('animals.show', $animal) }}"
-                                       class="inline-block w-full text-center bg-[#A02CDB] text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition">
-                                        Ver detalhes
-                                    </a>
-                                </div>
+                            </div>
+                            
+                            <div class="mt-auto">
+                                <a href="{{ route('animals.show', $animal) }}"
+                                   class="inline-block w-full text-center bg-[#A02CDB] text-white py-2 rounded-b-lg font-semibold hover:bg-purple-700 transition">
+                                    Ver detalhes
+                                </a>
                             </div>
                         </div>
                     @endforeach
@@ -70,7 +70,7 @@
 
                 {{-- Paginação --}}
                 @if ($animals->hasPages())
-                    <div class="flex items-center justify-between mt-10">
+                    <div class="flex items-center justify-between mt-10 w-full">
 
                         {{-- Anterior --}}
                         @if ($animals->onFirstPage())
@@ -98,7 +98,6 @@
 
                     </div>
                 @endif
-
             @else
                 <div class="bg-white p-8 rounded-xl shadow-sm border text-center">
                     <p class="text-gray-600">

@@ -3,6 +3,7 @@ export default {
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
     "./resources/**/*.vue",
+    './resources/**/*.{html,jsx,ts,tsx}',
   ],
   theme: {
     extend: {

@@ -1,14 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Animalidade — Bem-estar Animal')
+@section('title', 'Animalidade - Bem-estar Animal')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 py-12">
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <section class="text-center mb-16">
+        <img src="{{ asset('images/banner-home.jpg')}}" alt="Banner Animalidade" class="mx-auto shadow-lg">
+    </section>
 
     {{-- Hero --}}
     <section class="text-center mb-16">
         <h1 class="text-3xl md:text-4xl font-bold text-[#A02CDB] mb-4">
-            Animalidade — Promovendo o bem-estar animal
+            Animalidade - Promovendo o bem-estar animal
         </h1>
         <p class="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
             Nosso projeto visa conscientizar, proteger e promover os direitos dos animais,
@@ -30,7 +33,7 @@
             <h2 class="text-xl font-semibold text-[#2CDBC0] mb-2">🩺 Liberdade Sanitária</h2>
             <p class="mb-2">Prevenir doenças e garantir atendimento veterinário.</p>
             <p class="text-sm text-gray-600">
-                Lei nº 9.605/1998 — Crimes Ambientais.
+                Lei nº 9.605/1998 - Crimes Ambientais.
             </p>
         </div>
 

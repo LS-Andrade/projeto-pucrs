@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $animal->name . ' — Animalidade')
+@section('title', $animal->name . ' - Animalidade')
 
 @section('content')
 <section class="max-w-7xl mx-auto px-4 py-8">
@@ -66,7 +66,7 @@
             </div>
 
             {{-- Organização --}}
-            <div class="bg-gray-50 p-4 rounded-xl mb-6 shadow-sm">
+            <div class="bg-sky-500 p-4 rounded-xl mb-6 shadow-sm">
                 <h2 class="text-lg font-semibold mb-2 text-gray-800">Responsável</h2>
                 <p class="font-medium text-gray-900">
                     {{ $animal->organization->name ?? 'Organização não informada' }}

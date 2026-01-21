@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Animalidade')</title>
 
-    <meta name="description" content="Animalidade — Plataforma para promoção do bem-estar animal, adoção responsável e educação animal.">
+    <meta name="description" content="Animalidade - Plataforma para promoção do bem-estar animal, adoção responsável e educação animal.">
 
     {{-- Assets compilados --}}
     @php
@@ -15,17 +15,21 @@
     @if(file_exists($manifestPath))
         @php
             $manifest = json_decode(file_get_contents($manifestPath), true);
-            $css = $manifest['resources/css/app.css']['file'] ?? null;
-            $js = $manifest['resources/js/app.js']['file'] ?? null;
         @endphp
 
-        @if($css)
-            <link rel="stylesheet" href="{{ asset('build/' . $css) }}">
-        @endif
+        {{-- Carregar todos os arquivos CSS --}}
+        @foreach($manifest as $file => $data)
+            @if(str_ends_with($file, '.css'))
+                <link rel="stylesheet" href="{{ asset('build/' . $data['file']) }}">
+            @endif
+        @endforeach
 
-        @if($js)
-            <script src="{{ asset('build/' . $js) }}" defer></script>
-        @endif
+        {{-- Carregar todos os arquivos JS --}}
+        @foreach($manifest as $file => $data)
+            @if(str_ends_with($file, '.js'))
+                <script src="{{ asset('build/' . $data['file']) }}" defer></script>
+            @endif
+        @endforeach
     @else
         {{-- Fallback --}}
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">

@@ -1,19 +1,17 @@
-<div x-data="{ open: false }">
-
-    {{-- Toggle mobile --}}
-    <button 
-        class="lg:hidden w-full mb-4 bg-[#A02CDB] text-white py-2 rounded-lg font-semibold"
-        @click="open = !open"
-        x-text="open ? 'Fechar filtros' : 'Abrir filtros'">
+{{-- Botão para exibir filtros no mobile --}}
+<div class="lg:hidden mb-4">
+    <button id="toggle-filters" class="bg-[#A02CDB] text-white px-4 py-2 rounded w-full">
+        Mostrar Filtros
     </button>
+</div>
 
+{{-- Filtros --}}
+<div id="filters" class="hidden lg:block">
     {{-- Formulário de filtros --}}
     <form 
         method="GET" 
         action="{{ route('animals.index') }}"
-        class="bg-white p-6 rounded-xl shadow-sm border space-y-6
-               lg:block" 
-        :class="{ 'hidden': !open && window.innerWidth < 1024 }">
+        class="bg-white p-6 rounded-xl shadow-sm border space-y-6">
 
         <h2 class="text-xl font-semibold text-[#A02CDB] mb-2">
             Filtrar animais
@@ -25,7 +23,9 @@
             <select name="species" class="w-full border rounded-lg px-3 py-2 focus:ring-[#A02CDB] focus:border-[#A02CDB]">
                 <option value="">Todas</option>
                 <option value="dog" {{ request('species')=='dog' ? 'selected' : '' }}>Cachorro</option>
+                <option value="rabbit" {{ request('species')=='rabbit' ? 'selected' : '' }}>Coelho</option>
                 <option value="cat" {{ request('species')=='cat' ? 'selected' : '' }}>Gato</option>
+                <option value="bird" {{ request('species')=='bird' ? 'selected' : '' }}>Pássaro</option>
                 <option value="other" {{ request('species')=='other' ? 'selected' : '' }}>Outros</option>
             </select>
         </div>
