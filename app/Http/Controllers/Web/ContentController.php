@@ -4,18 +4,24 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Content;
+use Illuminate\Http\Request;
 
 class ContentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('contents.index', [
-            'contents' => Content::where('is_active', true)
-                ->whereNotNull('published_at')
-                ->latest('published_at')
-                ->with('category', 'author')
-                ->paginate(9),
-        ]);
+        $query = Content::where('is_active', true)
+            ->whereNotNull('published_at')
+            ->latest('published_at')
+            ->with('category', 'author');
+
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        $contents = $query->paginate(9)->withQueryString();
+
+        return view('contents.index', compact('contents'));
     }
 
     public function show(Content $content)
