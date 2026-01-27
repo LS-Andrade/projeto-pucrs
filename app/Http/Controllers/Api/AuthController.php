@@ -8,6 +8,38 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    /**
+     * Registrar novo usuário
+     * 
+     * Cria uma nova conta de usuário no sistema.
+     * 
+     * @group Autenticação
+     * @unauthenticated
+     * 
+     * @bodyParam name string required Nome completo do usuário. Example: João Silva
+     * @bodyParam email string required E-mail do usuário. Example: joao@example.com
+     * @bodyParam password string required Senha (mínimo 6 caracteres). Example: senha123
+     * @bodyParam password_confirmation string required Confirmação da senha. Example: senha123
+     * @bodyParam role string required Tipo de usuário (admin, protector, adopter). Example: adopter
+     * 
+     * @response 201 {
+     *   "user": {
+     *     "id": 1,
+     *     "name": "João Silva",
+     *     "email": "joao@example.com",
+     *     "role": "adopter",
+     *     "created_at": "2026-01-27T10:00:00.000000Z"
+     *   },
+     *   "token": "1|abcdefghijklmnopqrstuvwxyz123456789"
+     * }
+     * 
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "email": ["The email has already been taken."]
+     *   }
+     * }
+     */
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -29,6 +61,31 @@ class AuthController extends Controller
         return response()->json(compact('user', 'token'), 201);
     }
 
+    /**
+     * Login de usuário
+     * 
+     * Autentica um usuário e retorna um token de acesso.
+     * 
+     * @group Autenticação
+     * @unauthenticated
+     * 
+     * @bodyParam email string required E-mail do usuário. Example: joao@example.com
+     * @bodyParam password string required Senha do usuário. Example: senha123
+     * 
+     * @response 200 {
+     *   "user": {
+     *     "id": 1,
+     *     "name": "João Silva",
+     *     "email": "joao@example.com",
+     *     "role": "adopter"
+     *   },
+     *   "token": "1|abcdefghijklmnopqrstuvwxyz123456789"
+     * }
+     * 
+     * @response 401 {
+     *   "message": "Credenciais inválidas"
+     * }
+     */
     public function login(Request $request)
     {
         $data = $request->validate([

@@ -14,16 +14,66 @@ class ContentController extends Controller
         $this->authorizeResource(Content::class, 'content');
     }
 
+    /**
+     * Listar conteúdos
+     * 
+     * Retorna uma lista de conteúdos educativos e informativos.
+     * 
+     * @group Conteúdo
+     * @unauthenticated
+     * 
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "title": "Como cuidar de um cachorro",
+     *       "body": "Dicas importantes...",
+     *       "category": {},
+     *       "author": {}
+     *     }
+     *   ]
+     * }
+     */
     public function index()
     {
         return Content::with('category', 'author')->paginate();
     }
 
+    /**
+     * Exibir conteúdo
+     * 
+     * Retorna detalhes de um conteúdo específico.
+     * 
+     * @group Conteúdo
+     * @unauthenticated
+     * 
+     * @urlParam content integer required ID do conteúdo. Example: 1
+     * 
+     * @response 200 {
+     *   "id": 1,
+     *   "title": "Como cuidar de um cachorro",
+     *   "body": "Texto completo..."
+     * }
+     */
     public function show(Content $content)
     {
         return $content->load('category', 'author');
     }
 
+    /**
+     * Criar conteúdo
+     * 
+     * Cria um novo conteúdo informativo.
+     * 
+     * @group Conteúdo
+     * @authenticated
+     * 
+     * @response 201 {
+     *   "id": 1,
+     *   "title": "Novo artigo",
+     *   "author_id": 1
+     * }
+     */
     public function store(ContentStoreRequest $request)
     {
         return Content::create([
@@ -34,6 +84,21 @@ class ContentController extends Controller
         ]);
     }
 
+    /**
+     * Atualizar conteúdo
+     * 
+     * Atualiza informações de um conteúdo.
+     * 
+     * @group Conteúdo
+     * @authenticated
+     * 
+     * @urlParam content integer required ID do conteúdo. Example: 1
+     * 
+     * @response 200 {
+     *   "id": 1,
+     *   "title": "Artigo atualizado"
+     * }
+     */
     public function update(ContentUpdateRequest $request, Content $content)
     {
         $content->update($request->validated());
@@ -43,6 +108,18 @@ class ContentController extends Controller
         return $content;
     }
 
+    /**
+     * Excluir conteúdo
+     * 
+     * Remove um conteúdo do sistema.
+     * 
+     * @group Conteúdo
+     * @authenticated
+     * 
+     * @urlParam content integer required ID do conteúdo. Example: 1
+     * 
+     * @response 204 {}
+     */
     public function destroy(Content $content)
     {
         $content->delete();
