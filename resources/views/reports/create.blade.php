@@ -13,7 +13,7 @@
 
     <div class="grid grid-cols-1 gap-8">
 
-        <h1 class="text-3xl font-bold text-red-600">
+        <h1 class="text-3xl md:text-4xl font-bold text-[#A02CDB] mb-2">
             Fazer Denúncia
         </h1>
 
