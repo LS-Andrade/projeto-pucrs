@@ -6,12 +6,14 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Illuminate\Support\Facades\Gate;
 
 use App\Models\Animal;
+use App\Models\AnimalPhoto;
 use App\Models\Adoption;
 use App\Models\Report;
 use App\Models\EducationalContent;
 use App\Models\Organization;
 use App\Models\Feedback;
 
+use App\Policies\AnimalPhotoPolicy; 
 use App\Policies\AnimalPolicy;
 use App\Policies\AdoptionPolicy;
 use App\Policies\ReportPolicy;
@@ -19,12 +21,13 @@ use App\Policies\EducationalContentPolicy;
 use App\Policies\OrganizationPolicy;
 use App\Policies\FeedbackPolicy;
 
-class AuthServiceProvider extends ServiceProvider
+class AppServiceProvider extends ServiceProvider
 {
     protected $policies = [
         \App\Models\User::class => \App\Policies\UserPolicy::class,
         \App\Models\Organization::class => \App\Policies\OrganizationPolicy::class,
         \App\Models\Animal::class => \App\Policies\AnimalPolicy::class,
+        \App\Models\AnimalPhoto::class => \App\Policies\AnimalPhotoPolicy::class,
         \App\Models\Adoption::class => \App\Policies\AdoptionPolicy::class,
         \App\Models\AdoptionFollowup::class => \App\Policies\AdoptionFollowupPolicy::class,
         \App\Models\Category::class => \App\Policies\CategoryPolicy::class,

@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'protector' => ProtectorMiddleware::class,
             'adopter' => AdopterMiddleware::class,
         ]);
+        $middleware->statefulApi();
     })
     ->withExceptions(function ($exceptions) {
         //

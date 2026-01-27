@@ -16,7 +16,7 @@ class OrganizationController extends Controller
 
     public function index()
     {
-        return Organization::with('users')->paginate();
+        return Organization::with('users')->orderBy('created_at', 'desc')->paginate(10);
     }
 
     public function show(Organization $organization)
@@ -26,12 +26,17 @@ class OrganizationController extends Controller
 
     public function store(OrganizationStoreRequest $request)
     {
-        return Organization::create($request->validated());
+        return Organization::create($request->validated() + [
+            'created_by' => auth()->id(),
+            'updated_by' => auth()->id(),
+        ]);
     }
 
     public function update(OrganizationUpdateRequest $request, Organization $organization)
     {
-        $organization->update($request->validated());
+        $organization->update($request->validated() + [
+            'updated_by' => auth()->id(),
+        ]);
         return $organization;
     }
 

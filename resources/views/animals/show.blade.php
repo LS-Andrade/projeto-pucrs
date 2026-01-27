@@ -12,10 +12,23 @@
         <span class="font-semibold text-gray-800">{{ $animal->name }}</span>
     </nav>
 
+    {{-- Mensagens --}}
+    @if (session('success'))
+        <div class="mb-4 p-4 rounded-lg bg-green-100 text-green-700">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="mb-4 p-4 rounded-lg bg-red-100 text-red-700">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
         {{-- Galeria --}}
-        <div x-data="{ photo: '{{ $animal->photos->first()?->photo ? ($animal->photos->first()->photo) : '' }}' }">
+        <div x-data="{ photo: '{{ $animal->photos->first() ? (str_starts_with($animal->photos->first()->photo, 'http') ? $animal->photos->first()->photo : '/storage/' . $animal->photos->first()->photo) : '' }}' }">
             <div class="bg-gray-100 rounded-xl overflow-hidden mb-4 h-80 flex items-center justify-center shadow">
                 @if($animal->photos->first())
                     <img :src="photo" alt="{{ $animal->name }}" class="w-full h-full object-cover">
@@ -27,9 +40,9 @@
             @if($animal->photos->count() > 1)
                 <div class="flex space-x-2 overflow-x-auto pb-2">
                     @foreach($animal->photos as $photo)
-                        <img src="{{ $photo->photo }}"
+                        <img src="{{ str_starts_with($photo->photo, 'http') ? $photo->photo : '/storage/' . $photo->photo }}"
                              alt="{{ $animal->name }}"
-                             @click="photo='{{ $photo->photo }}'"
+                             @click="photo='{{ str_starts_with($photo->photo, 'http') ? $photo->photo : '/storage/' . $photo->photo }}'"
                              class="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-purple-600 transition">
                     @endforeach
                 </div>

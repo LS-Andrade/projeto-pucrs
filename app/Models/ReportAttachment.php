@@ -18,4 +18,9 @@ class ReportAttachment extends Model
     {
         return $this->belongsTo(Report::class);
     }
+
+    public function getUrlAttribute()
+    {
+        return asset('storage/reports/' . $this->file_path);
+    }
 }

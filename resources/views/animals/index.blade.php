@@ -34,7 +34,7 @@
                             <a href="{{ route('animals.show', $animal) }}">
                                 <div class="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
                                     @if($animal->photos->first())
-                                        <img src="{{ $animal->photos->first()->photo }}"
+                                        <img src="{{ str_starts_with($animal->photos->first()->photo, 'http') ? $animal->photos->first()->photo : '/storage/' . $animal->photos->first()->photo }}"
                                              alt="{{ $animal->name }}"
                                              class="w-full h-full object-cover">
                                     @else

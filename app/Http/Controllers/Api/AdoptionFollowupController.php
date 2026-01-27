@@ -16,7 +16,13 @@ class AdoptionFollowupController extends Controller
 
     public function index()
     {
-        return AdoptionFollowup::with('adoption')->paginate();
+        $query = AdoptionFollowup::with('adoption');
+
+        if (request('adoption_id')) {
+            $query->where('adoption_id', request('adoption_id'));
+        }
+
+        return $query->paginate();
     }
 
     public function show(AdoptionFollowup $adoption_followup)

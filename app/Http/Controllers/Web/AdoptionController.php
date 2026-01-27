@@ -21,9 +21,19 @@ class AdoptionController extends Controller
             'motivation' => ['required', 'string', 'min:10'],
         ]);
 
+        // Verificar se o usuário já fez uma solicitação para este animal
+        $existingAdoption = Adoption::where('animal_id', $validated['animal_id'])
+            ->where('adopter_id', auth()->id())
+            ->first();
+
+        if ($existingAdoption) {
+            return redirect()->back()
+                ->withErrors(['animal_id' => 'Você já enviou uma solicitação de adoção para este animal.']);
+        }
+
         Adoption::create([
             'animal_id'   => $validated['animal_id'],
-            'adopter_id'  => auth()->id(), // se houver login
+            'adopter_id'  => auth()->id(),
             'status'      => 'pending',
             'motivation'  => $validated['motivation'],
             'created_by'  => auth()->id(),

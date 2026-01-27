@@ -5,6 +5,7 @@
   
   - tailwindcss@^3 [https://tailwindcss.com/]
   - alpinejs [https://alpinejs.dev/]
+  - quilljs [https://quilljs.com/]
 
 # Banco de dados
   - MariaDB v11.6.2

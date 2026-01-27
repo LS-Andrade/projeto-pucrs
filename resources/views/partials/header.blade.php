@@ -12,7 +12,14 @@
             <a href="{{ route('contents.index') }}" class="hover:text-primary transition">Conteúdos</a>
 
             @auth
-                <a href="{{ route('dashboard') }}" class="hover:text-primary transition">Painel</a>
+                @if (Auth::user()->role === 'admin')
+                    <a href="{{ route('dashboard') }}" class="hover:text-primary transition">Painel</a>
+                @else
+                    <a href="{{ route('dashboard') }}" class="hover:text-primary transition">Minhas adoções</a>
+                @endif
+                <a href="{{ route('logout') }}" class="hover:text-primary transition">Sair</a>
+            @else
+                <a href="{{ route('login') }}" class="hover:text-primary transition">Entrar</a>
             @endauth
         </nav>
 
@@ -32,9 +39,16 @@
                 <a href="{{ route('animals.index') }}" class="block px-4 py-2 hover:bg-gray-100">Adoção</a>
                 <a href="{{ route('reports.create') }}" class="block px-4 py-2 hover:bg-gray-100">Denúncias</a>
                 <a href="{{ route('contents.index') }}" class="block px-4 py-2 hover:bg-gray-100">Conteúdos</a>
-
                 @auth
-                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 hover:bg-gray-100">Painel</a>
+                    @if (Auth::user()->role === 'admin')
+                        <a href="{{ route('dashboard') }}" class="block px-4 py-2 hover:bg-gray-100">Painel</a>
+                    @else
+                        <a href="{{ route('dashboard') }}" class="block px-4 py-2 hover:bg-gray-100">Minhas adoções</a>
+                    @endif
+                    
+                    <a href="{{ route('logout') }}" class="block px-4 py-2 hover:bg-gray-100">Sair</a>
+                @else
+                    <a href="{{ route('login') }}" class="block px-4 py-2 hover:bg-gray-100">Entrar</a>
                 @endauth
             </div>
         </div>

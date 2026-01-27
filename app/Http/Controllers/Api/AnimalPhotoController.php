@@ -17,7 +17,13 @@ class AnimalPhotoController extends Controller
 
     public function index()
     {
-        return AnimalPhoto::with('animal')->paginate();
+        $query = AnimalPhoto::with('animal');
+        
+        if (request('animal_id')) {
+            $query->where('animal_id', request('animal_id'));
+        }
+        
+        return $query->paginate();
     }
 
     public function show(AnimalPhoto $animal_photo)

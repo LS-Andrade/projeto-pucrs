@@ -16,7 +16,7 @@ class UserController extends Controller
 
     public function index()
     {
-        return User::paginate();
+        return User::orderBy('created_at', 'desc')->paginate(10);
     }
 
     public function show(User $user)
@@ -26,12 +26,17 @@ class UserController extends Controller
 
     public function store(UserStoreRequest $request)
     {
-        return User::create($request->validated());
+        return User::create($request->validated() + [
+            'created_by' => auth()->id(),
+            'updated_by' => auth()->id(),
+        ]);
     }
 
     public function update(UserUpdateRequest $request, User $user)
     {
-        $user->update($request->validated());
+        $user->update($request->validated() + [
+            'updated_by' => auth()->id(),
+        ]);
         return $user;
     }
 

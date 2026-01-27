@@ -24,7 +24,6 @@ Route::post('/auth/register', [\App\Http\Controllers\Api\AuthController::class, 
 
 // Public browsing
 Route::get('/animals', [AnimalController::class, 'index']);
-Route::get('/animals/{animal}', [AnimalController::class, 'show']);
 Route::get('/organizations', [OrganizationController::class, 'index']);
 Route::get('/organizations/{organization}', [OrganizationController::class, 'show']);
 Route::get('/categories', [CategoryController::class, 'index']);
@@ -39,6 +38,9 @@ Route::get('/contents/{content}', [ContentController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
+    // Minhas adoções (adotante)
+    Route::get('/my-adoptions', [AdoptionController::class, 'myAdoptions']);
+
     // Users
     Route::apiResource('users', UserController::class);
 
@@ -50,6 +52,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/organizations/{organization}/users/{user}', [OrganizationController::class, 'detachUser']);
 
     // Animals
+    Route::get('/animals/{animal}', [AnimalController::class, 'show']);
     Route::apiResource('animals', AnimalController::class)->except(['index', 'show']);
 
     // Animal Photos
@@ -62,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('adoption-followups', AdoptionFollowupController::class);
 
     // Categories
+    Route::get('/categories/{category}', [CategoryController::class, 'show']);
     Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
 
     // Contents

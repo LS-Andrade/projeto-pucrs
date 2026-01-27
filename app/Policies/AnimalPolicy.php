@@ -24,9 +24,7 @@ class AnimalPolicy
 
     public function update(User $user, Animal $animal): bool
     {
-        return $user->role === 'admin' ||
-               ($user->role === 'manager' && 
-                $animal->organization->users->contains($user->id));
+        return in_array($user->role, ['admin', 'manager']);
     }
 
     public function delete(User $user, Animal $animal): bool

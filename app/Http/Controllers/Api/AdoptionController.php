@@ -16,12 +16,20 @@ class AdoptionController extends Controller
 
     public function index()
     {
-        return Adoption::with('animal', 'adopter')->paginate();
+        return Adoption::with('animal', 'adopter')->orderBy('created_at', 'desc')->paginate(10);
+    }
+
+    public function myAdoptions()
+    {
+        return Adoption::where('adopter_id', auth()->id())
+            ->with('animal', 'animal.organization')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
     }
 
     public function show(Adoption $adoption)
     {
-        return $adoption->load('animal', 'adopter');
+        return $adoption->load('animal', 'adopter', 'followups');
     }
 
     public function store(AdoptionStoreRequest $request)
