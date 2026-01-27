@@ -26,7 +26,9 @@ class AnimalController extends Controller
 
     public function store(AnimalStoreRequest $request)
     {
-        return Animal::create($request->validated());
+        $animal = Animal::create($request->validated());
+
+        return response()->json($animal, 201);
     }
 
     public function update(AnimalUpdateRequest $request, Animal $animal)

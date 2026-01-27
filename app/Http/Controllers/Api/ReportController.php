@@ -16,23 +16,25 @@ class ReportController extends Controller
 
     public function index()
     {
-        return Report::with('reporter', 'assignee')->paginate();
+        return Report::with('reporter', 'assignedUser')->paginate();
     }
 
     public function show(Report $report)
     {
-        return $report->load('reporter', 'assignee', 'attachments');
+        return $report->load('reporter', 'assignedUser', 'attachments');
     }
 
     public function store(ReportStoreRequest $request)
     {
-        return Report::create([
+        $report = Report::create([
             ...$request->validated(),
             'reporter_id' => auth()->id(),
             'status'      => 'pending',
             'created_by'  => auth()->id(),
             'updated_by'  => auth()->id(),
         ]);
+
+        return response()->json($report, 201);
     }
 
     public function update(ReportUpdateRequest $request, Report $report)

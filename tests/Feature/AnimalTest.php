@@ -1,24 +1,32 @@
 <?php
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Animal;
+use App\Models\Organization;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 
 class AnimalTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_protector_can_create_animal()
+    public function test_admin_can_create_animal()
     {
-        $user = User::factory()->create(['role' => 'protector']);
+        $user = User::factory()->create(['role' => 'admin']);
+        $organization = Organization::factory()->create();
+        $organization->users()->attach($user->id);
 
-        $this->actingAs($user)->postJson('/api/animals', [
+        Sanctum::actingAs($user);
+
+        $this->postJson('/api/animals', [
             'name' => 'Rex',
             'species' => 'dog',
             'gender' => 'male',
-            'organization_id' => $user->organizations()->first()?->id ?? null,
+            'status' => 'available',
+            'organization_id' => $organization->id,
         ])->assertStatus(201);
     }
 

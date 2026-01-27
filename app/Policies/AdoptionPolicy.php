@@ -21,7 +21,7 @@ class AdoptionPolicy
 
     public function create(User $user): bool
     {
-        return $user->role === 'user';
+        return in_array($user->role, ['user', 'adopter']);
     }
 
     public function update(User $user, Adoption $adoption): bool

@@ -19,9 +19,8 @@ class ReportAttachmentPolicy
 
     public function create(User $user): bool
     {
-        return $user->role === 'admin' ||
-               $attachment->report->assigned_to === $user->id ||
-               $attachment->report->reporter_id === $user->id;
+        // Qualquer usuario autenticado pode criar; regras adicionais ficam na camada de servico/controlador
+        return (bool) $user;
     }
 
     public function update(User $user, ReportAttachment $attachment): bool

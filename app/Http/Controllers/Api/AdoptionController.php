@@ -34,7 +34,7 @@ class AdoptionController extends Controller
 
     public function store(AdoptionStoreRequest $request)
     {
-        return Adoption::create([
+        $adoption = Adoption::create([
             'animal_id' => $request->validated()['animal_id'],
             'adopter_id'=> auth()->id(),
             'motivation'=> $request->validated()['motivation'] ?? null,
@@ -42,6 +42,8 @@ class AdoptionController extends Controller
             'created_by'=> auth()->id(),
             'updated_by'=> auth()->id(),
         ]);
+
+        return response()->json($adoption, 201);
     }
 
     public function update(AdoptionUpdateRequest $request, Adoption $adoption)
