@@ -15,12 +15,31 @@
 - Faça um clone o repositório
 - Copie o arquivo .env.example para .env na raiz do projeto e defina os valores das variáveis
 - Instale as bibliotecas e dependências via composer e npm através dos comandos
-`npm install`
-`composer install`
-- Compile os estilos
-`npm run build` 
+
+```bash
+npm install
+```
+
+```bash
+composer install
+```
+
+- Compile os estilos e scripts
+
+```bash
+npm run build
+``` 
+
 - Crie um banco de dados e insira o nome no arquivo .env
+
 - Execute as migrate para criação das tabelas do banco de dados
-`php artisan migrate:fresh`
+
+```bash
+php artisan migrate:fresh
+```
+
 Caso queira dados fictícios, utilize:
-`php artisan migrate:fresh --seed` 
+
+```bash
+php artisan migrate:fresh --seed
+``` 
